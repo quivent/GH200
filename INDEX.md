@@ -46,7 +46,12 @@
 - 2026-05-25 ~02:25 — Round 3 dispatched (20 verification + deepening agents reading R1 + R2). All running.
 - 2026-05-25 ~02:40 — `synthesis/EXEC_BRIEF.md` first draft written; updated with R2-C corrections.
 - 2026-05-25 ~03:00 — Round 3 complete (20/20). Big corrections to driver/CUDA strategy (R580 EOL Aug 4 2026; cap at CUDA 12.x), pricing (GCP H100 floor was a misread — real AWS p5 3-yr at $2,170/mo is the hyperscaler-Hopper floor), Flux.2-dev VRAM (doesn't fit on GH200 96GB no-offload after all), Lambda fabric (NDR400 IB, not BlueField-3), llama.cpp config (validated combos are A or B, not both).
-- 2026-05-25 ~03:05 — Round 4 dispatched: 20 LLM-only agents iterating on R1-R3, per user request "ONLY language inference".
+- 2026-05-25 ~03:05 — Round 4 dispatched: 20 LLM-only agents iterating on R1-R3.
+- 2026-05-25 ~03:20 — Round 4 complete (20/20).
+- 2026-05-25 ~03:25 — Round 5 dispatched: 15 narrow-deep agents on Llama-3.3-70B Q4 + Qwen3.6-27B Q4 + peers, per user request.
+- 2026-05-25 ~04:15 — Round 5 complete (15/15). All 83 reports landed.
+- 2026-05-25 ~04:20 — `synthesis/MODEL_PICK_BRIEF.md` written — final substitution proposal: drop Llama-3.3-70B → Qwen3.6-27B + GPT-OSS-120B.
+- Repository: `git log --oneline` shows 6 commits to date.
 
 ## Headline findings from Round 1 (pre-Round-2)
 
