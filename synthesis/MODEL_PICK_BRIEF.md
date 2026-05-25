@@ -8,7 +8,11 @@
 ## The 30-second answer
 
 1. **For least friction**: `drikster80/vllm-gh200-openai` Docker, 2 commands from fresh SSH, ~50 tok/s with AWQ INT4 on Llama-3.3-70B. Same image runs Qwen3.6-27B.
-2. **Drop the "Q4" constraint where it costs you**: on a 96 GB GH200 with 480 GB Grace LPDDR, **FP8 beats Q4 on every axis** for these dense models (fits comfortably, faster decode, higher quality). The "FP8 broken" rule from user memory is **DiT-class diffusion only** (per Round-2 forensic audit + 3× cross-arch reproduction).
+2. **FP8 vs Q4 picks differently by workload — not a one-size answer**:
+   - **Single-user / batch=1 / decode-bound**: Q4 wins on tok/s by ~1.4-1.6× because decode is memory-bandwidth-bound and Q4 weights are ~17 GB vs FP8's ~27 GB for Qwen3.6-27B (~40 GB vs ~70 GB for Llama-3.3-70B). R4 #8 measured AWQ-Marlin at ~2× FP8 at batch 1-8.
+   - **Batch ≥16 / prefill / TTFT-bound**: FP8 wins because compute becomes the bottleneck and FP8 tensor cores deliver ~2× FLOPs with no dequant overhead.
+   - **Quality**: FP8 W8A8 loses ≤0.5 pt MMLU vs BF16; AWQ Q4 loses ~1-2 pt (FOEM-calibrated GPTQ closes to ~+1.95% PPL).
+   - **FP8 is safe for text LLMs on Hopper** post vLLM 0.19.1. The user-memory "FP8 broken" rule is **DiT-class diffusion only** (Round-2 forensic audit + 3× cross-arch reproduction).
 3. **Qwen3.6-27B dominates Llama-3.3-70B on the workloads that matter**: MMLU-Pro +17, GPQA-Diamond +37, LiveCodeBench v6 83.9 (Llama doesn't compete), AIME26 94.1 (Llama n/a). Llama wins only IFEval. Qwen3.6-27B is multimodal native (text+image+video), 201 languages, 262K ctx.
 4. **Both fit on GH200 simultaneously (~87 GB combined Q4)** — run both, A/B on your actual workload.
 
